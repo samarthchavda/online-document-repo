@@ -1,0 +1,133 @@
+.upload-container {
+  background: linear-gradient(90deg, #a7f3d0, #34d399, #0f766e);
+  min-height: 100vh;
+  padding: 2rem;
+  color: #0f172a;
+  font-family: 'Poppins', sans-serif;
+}
+
+.upload-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.upload-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+.pdf-upload-card {
+  text-align: center;
+  margin-top: 2rem;
+  background: whitesmoke;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid white;
+}
+
+.assigned-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.assigned-card {
+  background-color: #f0fdf4;
+  border: 1px solid #34d399;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+}
+
+.assigned-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #065f46;
+}
+
+.assigned-info p {
+  margin: 0.3rem 0;
+}
+
+.assigned-info a {
+  color: #10b981;
+  text-decoration: underline;
+}
+
+.submit-section {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.submit-input {
+  border: 1px solid #0f766e;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 250px;
+  font-size: 0.95rem;
+  background-color: white;
+}
+
+.submit-btn {
+  background: linear-gradient(90deg, #99f6e4, #2dd4bf);
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(90deg, #2dd4bf, #0f766e);
+  color: white;
+}
+
+/* Upload New File section */
+.upload-section {
+  margin-top: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.1);
+  text-align: left;
+}
+
+.file-input {
+  margin-bottom: 1rem;
+  border: 1px solid #0f766e;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.upload-btn {
+  background: linear-gradient(90deg, #99f6e4, #2dd4bf);
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+  background: linear-gradient(90deg, #2dd4bf, #0f766e);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .upload-title {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,123 @@
+.login-container {
+  background: linear-gradient(90deg, #a7f3d0, #34d399, #0f766e);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 16px rgba(15, 118, 110, 0.2);
+  text-align: center;
+  height: 25rem;
+  margin-bottom: 10rem;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #475569;
+  margin-bottom: 1.5rem;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #0f766e;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.login-btn {
+  background: linear-gradient(90deg, #99f6e4, #2dd4bf);
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.login-btn:hover {
+  background: linear-gradient(90deg, #2dd4bf, #0f766e);
+  color: white;
+}
+
+.login-footer {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.login-footer a {
+  color: #0f766e;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-card {
+    width: 90%;
+    max-width: 100%;
+    padding: 1.5rem;
+    height: auto;
+    margin-bottom: 4rem;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .login-input {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  .login-btn {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  .login-footer {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-title {
+    font-size: 1.3rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .login-card {
+    padding: 1rem;
+    margin: 1rem;
+    height: auto;
+  }
+}

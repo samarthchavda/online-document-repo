@@ -1,0 +1,100 @@
+/* Container for full page */
+#faculty-signup-container {
+  background: linear-gradient(135deg, #a7f3d0, #34d399, #0f766e);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+/* Card holding the form */
+#faculty-signup-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Card title */
+#faculty-signup-card h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+  color: #0f766e;
+}
+
+/* Form inputs */
+#faculty-signup-card form input[type="text"],
+#faculty-signup-card form input[type="email"],
+#faculty-signup-card form input[type="password"],
+#faculty-signup-card form input[type="file"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+#faculty-signup-card form input[type="text"]:focus,
+#faculty-signup-card form input[type="email"]:focus,
+#faculty-signup-card form input[type="password"]:focus,
+#faculty-signup-card form input[type="file"]:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 5px rgba(16, 185, 129, 0.4);
+  outline: none;
+}
+
+/* File input custom style */
+#faculty-signup-card form input[type="file"] {
+  padding: 6px;
+}
+
+/* Submit button */
+#faculty-signup-card form button {
+  width: 100%;
+  background-color: #10b981;
+  color: #fff;
+  padding: 12px 0;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#faculty-signup-card form button:hover {
+  background-color: #0f766e;
+}
+
+/* Toastify adjustments */
+.Toastify__toast-container {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Animation for card */
+@keyframes fadeIn {
+  0% { transform: translateY(-30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  #faculty-signup-card {
+    padding: 30px 20px;
+  }
+
+  #faculty-signup-card h2 {
+    font-size: 24px;
+  }
+
+  #faculty-signup-card form button {
+    font-size: 16px;
+  }
+}

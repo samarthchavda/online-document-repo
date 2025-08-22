@@ -1,0 +1,162 @@
+/* Faculty container with wider width */
+.faculty-container {
+  background: #f0fdf4;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 1100px; /* Increased from 600px */
+  margin: 2rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Heading */
+.faculty-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #065f46;
+}
+
+/* Inputs */
+.faculty-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Assign Task button */
+.faculty-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.faculty-btn:hover {
+  background-color: #059669;
+}
+
+/* Tabs */
+.faculty-tab-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.faculty-tab-buttons button {
+  background: black;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.faculty-tab-buttons button.active-tab {
+  border-bottom: 3px solid white;
+}
+
+/* Student Submission Box */
+.submission-wrapper {
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: #ecfdf5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+/* Student Submission Table */
+.submission-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.submission-table th,
+.submission-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.submission-table th {
+  background-color: #10b981;
+  color: white;
+  font-weight: 600;
+}
+
+.submission-table td a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.submission-table td a:hover {
+  text-decoration: underline;
+}
+
+.submission-table td.status-cell {
+  white-space: nowrap;
+}
+
+/* Table column widths */
+.submission-table th:nth-child(1),
+.submission-table td:nth-child(1) {
+  width: 30%;
+}
+.submission-table th:nth-child(2),
+.submission-table td:nth-child(2) {
+  width: 30%;
+}
+.submission-table th:nth-child(3),
+.submission-table td:nth-child(3) {
+  width: 15%;
+}
+.submission-table th:nth-child(4),
+.submission-table td:nth-child(4) {
+  width: 25%;
+}
+
+/* Approve/Reject buttons */
+.approve-btn,
+.reject-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.approve-btn {
+  background-color: #34d399;
+  color: #065f46;
+}
+
+.approve-btn:hover {
+  background-color: #10b981;
+}
+
+.reject-btn {
+  background-color: #fca5a5;
+  color: #991b1b;
+}
+
+.reject-btn:hover {
+  background-color: #f87171;
+}

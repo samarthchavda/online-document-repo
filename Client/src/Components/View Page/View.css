@@ -1,0 +1,117 @@
+.view-page {
+  background: linear-gradient(to right, #a7f3d0, #34d399, #0f766e);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  color: #1f2937;
+}
+
+.delete-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+/* Wrap action buttons together */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
+
+
+.view-page h1 {
+  text-align: center;
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Scoped section styles */
+.view-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.view-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #0f766e;
+}
+
+.view-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.view-section li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.view-section li:hover {
+  background: #e6fffa;
+}
+
+.view-section li a {
+  text-decoration: none;
+  background-color: #10b981;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.3s ease;
+}
+
+.view-section li a:hover {
+  background-color: #059669;
+}
+
+
+.status-approved {
+  color: green;
+  font-weight: bold;
+}
+.status-rejected {
+  color: red;
+  font-weight: bold;
+}
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+.faculty-task-item {
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.student-response, .submit-response {
+  margin-top: 8px;
+}
+
+.action-buttons a,
+.action-buttons button {
+  margin-right: 8px;
+}
