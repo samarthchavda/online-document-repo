@@ -11,6 +11,10 @@ section.Toastify:empty {
   display: none;
 }
 
+.signup-form{
+  padding: 20px;
+}
+
 .signup-card {
   background: white;
   padding: 2rem;

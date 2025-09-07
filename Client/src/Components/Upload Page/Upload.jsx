@@ -19,26 +19,37 @@ const Upload = () => {
     navigate('/login');
   }, [navigate]);
 
-  // Check login on mount
   useEffect(() => {
     if (!userEmail || !token) {
       logoutAndRedirect();
     }
   }, [userEmail, token, logoutAndRedirect]);
 
-  // Fetch helper with 401 handling
+  // 🔧 FIXED: Improved fetch helper with JSON error handling
   const fetchWithAuth = async (url) => {
     try {
       const res = await fetch(url, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.status === 401) {
-        logoutAndRedirect();
+
+      const contentType = res.headers.get("content-type");
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error(`Error from ${url}:`, text);
+        if (res.status === 401) logoutAndRedirect();
         return null;
       }
+
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        console.error("Expected JSON but got HTML:", text);
+        return null;
+      }
+
       return res.json();
     } catch (err) {
-      console.error(`Error fetching ${url}:`, err);
+      console.error(`Fetch error for ${url}:`, err);
       return null;
     }
   };
@@ -46,12 +57,12 @@ const Upload = () => {
   const fetchAssignedFiles = useCallback(async () => {
     const data = await fetchWithAuth(`http://localhost:2000/student/assigned-files/${userEmail}`);
     if (data) setAssignedFiles(data);
-  }, [userEmail, token]);
+  }, [userEmail]);
 
   const fetchStudentResponses = useCallback(async () => {
     const data = await fetchWithAuth(`http://localhost:2000/student/responses/${userEmail}`);
     if (data) setStudentResponses(data);
-  }, [userEmail, token]);
+  }, [userEmail]);
 
   useEffect(() => {
     fetchAssignedFiles();
@@ -69,22 +80,36 @@ const Upload = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    const res = await fetch('http://localhost:2000/uploads/upload', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` },
-      body: formData,
-    });
+    try {
+      const res = await fetch('http://localhost:2000/uploads/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
 
-    if (res.status === 401) return logoutAndRedirect();
-    const data = await res.json();
+      const contentType = res.headers.get("content-type");
 
-    if (data.status) {
-      alert("File uploaded successfully!");
-      setSelectedFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      fetchAssignedFiles(); // refresh
-    } else {
-      alert(data.message || "Upload failed.");
+      if (!res.ok || !contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        console.error("Upload error:", text);
+        if (res.status === 401) return logoutAndRedirect();
+        alert("Upload failed.");
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.status) {
+        alert("File uploaded successfully!");
+        setSelectedFile(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        fetchAssignedFiles(); // refresh
+      } else {
+        alert(data.message || "Upload failed.");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Something went wrong during upload.");
     }
   };
 
@@ -100,21 +125,35 @@ const Upload = () => {
     formData.append("studentEmail", userEmail);
     formData.append("facultyName", file.facultyName);
 
-    const res = await fetch("http://localhost:2000/student/submit-task", {
-      method: "POST",
-      headers: { 'Authorization': `Bearer ${token}` },
-      body: formData,
-    });
+    try {
+      const res = await fetch("http://localhost:2000/student/submit-task", {
+        method: "POST",
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
 
-    if (res.status === 401) return logoutAndRedirect();
-    const data = await res.json();
+      const contentType = res.headers.get("content-type");
 
-    if (data.status) {
-      alert("Response submitted successfully!");
-      fetchAssignedFiles();
-      fetchStudentResponses();
-    } else {
-      alert(data.message || "Failed to submit.");
+      if (!res.ok || !contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        console.error("Submit error:", text);
+        if (res.status === 401) return logoutAndRedirect();
+        alert("Submission failed.");
+        return;
+      }
+
+      const data = await res.json();
+
+      if (data.status) {
+        alert("Response submitted successfully!");
+        fetchAssignedFiles();
+        fetchStudentResponses();
+      } else {
+        alert(data.message || "Failed to submit.");
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("Something went wrong while submitting the response.");
     }
   };
 

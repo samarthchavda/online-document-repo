@@ -22,18 +22,18 @@ if (!fs.existsSync(uploadsDir)) {
 // Serve uploaded files
 app.use("/uploads", express.static(uploadsDir));
 
-// ===== MongoDB Connection =====
+//  MongoDB Connection 
 mongoose
   .connect("mongodb://127.0.0.1:27017/taskdb")
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error(err));
 
-// ===== Schemas =====
+// Schemas 
 const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
-  role: { type: String, default: "student" } // student | faculty | admin
+  role: { type: String, default: "student" } 
 });
 const User = mongoose.model("User", userSchema);
 
@@ -75,7 +75,7 @@ const studentResponseSchema = new mongoose.Schema({
 });
 const StudentResponse = mongoose.model("StudentResponse", studentResponseSchema);
 
-// ===== Multer setup =====
+// Multer setup 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
@@ -84,21 +84,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ===== JWT Middleware (not enforced on routes yet, but ready) =====
+//  JWT Middleware 
 function verifyToken(req, res, next) {
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) return res.status(401).json({ status: false, message: "No token" });
 
   jwt.verify(token, "secret", (err, decoded) => {
     if (err) return res.status(401).json({ status: false, message: "Invalid token" });
-    req.user = decoded; // { email }
+    req.user = decoded; 
     next();
   });
 }
 
-// ===== Routes =====
-
-// Normal user signup
 app.post("/users/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -239,8 +236,6 @@ app.delete("/users/delete/:id", async (req, res) => {
   }
 });
 
-// ===== Assign files, upload, responses =====
-
 // Assign task/file to student
 app.post("/faculty/assign-file", upload.single("file"), async (req, res) => {
   try {
@@ -329,9 +324,9 @@ app.post("/faculty/grade-submission/:id", async (req, res) => {
   }
 });
 
-// ====== MISSING ROUTES ADDED FOR YOUR FACULTY.jsx ======
+// MISSING ROUTES ADDED FOR YOUR FACULTY.jsx 
 
-// ✅ Get all students (uses User collection where role === 'student')
+//  Get all students (uses User collection where role === 'student')
 app.get("/faculty/students", async (req, res) => {
   try {
     const students = await User.find({ role: "student" }, { name: 1, email: 1 });
@@ -342,7 +337,7 @@ app.get("/faculty/students", async (req, res) => {
   }
 });
 
-// ✅ Fetch submissions for a specific faculty (by name)
+//  Fetch submissions for a specific faculty (by name)
 app.get("/faculty/responses/:facultyName", async (req, res) => {
   try {
     const { facultyName } = req.params;
@@ -354,7 +349,66 @@ app.get("/faculty/responses/:facultyName", async (req, res) => {
   }
 });
 
-// ===== Start server =====
+app.post("/uploads/upload", verifyToken, upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.json({ status: false, message: "No file uploaded" });
+    }
+
+    const newUpload = new Upload({
+      uploadedBy: req.user.email,
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+    });
+
+    await newUpload.save();
+    res.json({ status: true, message: "File uploaded successfully" });
+  } catch (err) {
+    console.error("Upload error:", err);
+    res.status(500).json({ status: false, message: "Server error" });
+  }
+});
+
+app.delete("/uploads/delete/:id", async (req, res) => {
+  try {
+    const fileId = req.params.id;
+    console.log("Delete requested for ID:", fileId);
+
+    const file = await Upload.findById(fileId); 
+    console.log("File found:", file);
+
+    if (!file) return res.status(404).json({ status: false, message: "File not found" });
+
+    const filePath = path.join(__dirname, "uploads", file.filename);
+    console.log("File path:", filePath);
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      console.log("File deleted from disk");
+    }
+
+    await Upload.findByIdAndDelete(fileId); 
+    console.log("DB entry deleted");
+
+    res.json({ status: true });
+  } catch (err) {
+    console.error("DELETE error:", err);
+    res.status(500).json({ status: false, message: "Server error during deletion" });
+  }
+});
+
+
+// Get uploads made by a specific user
+app.get("/uploads/user/:email", verifyToken, async (req, res) => {
+  try {
+    const uploads = await Upload.find({ uploadedBy: req.params.email });
+    res.json(uploads);
+  } catch (err) {
+    console.error("Error fetching user uploads:", err);
+    res.status(500).json({ status: false, message: "Server error" });
+  }
+});
+
 app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+  console.log(` Server running at http://localhost:${port}`);
 });

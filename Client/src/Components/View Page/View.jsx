@@ -262,12 +262,12 @@ const View = () => {
                           {response.status}
                         </span>
                       </p>
-                      <button
+                      {/* <button
                         className="delete-btn"
                         onClick={() => handleDeleteResponse(response._id)}
                       >
                         Delete Response
-                      </button>
+                      </button> */}
                     </div>
                   ) : (
                     <div className="submit-response">

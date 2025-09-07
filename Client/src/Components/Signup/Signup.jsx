@@ -115,6 +115,7 @@ const Signup = () => {
 
                 <div className="signup-footer">
                     <p>Already have an account? <a href="/login">Login here</a></p>
+                    <p>If you want to signup as faculty, <a href="/facultysignup">click here</a></p>
                 </div>
             </div>
         </div>
