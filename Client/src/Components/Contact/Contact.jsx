@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Contact.css';
-import contactImage from '../images/Contact.jpeg'; // if file is 'Contact.jpeg'
+import contactImage from '../Images/contact.jpeg';
 import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
