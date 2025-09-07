@@ -1,81 +1,61 @@
 const express = require("express");
-const Upload = require("../models/Upload");
 const multer = require("multer");
-const verifyToken = require("../middleware/verifyToken");
 const path = require("path");
 const fs = require("fs");
+const Upload = require("../models/Upload");
+const verifyToken = require("../middleware/auth");
 
 const router = express.Router();
 
+// Multer setup
+const uploadsDir = path.join(__dirname, "..", "uploads");
 const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
 const upload = multer({ storage });
 
-// Upload a file
+// Upload file
 router.post("/upload", verifyToken, upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.json({ status: false, message: "No file uploaded" });
-    }
-
-    const uploaderEmail = req.user.email;
-
-    const existingFile = await Upload.findOne({
-      uploadedBy: uploaderEmail,
-      originalname: req.file.originalname
-    });
-
-    if (existingFile) {
-      const uploadedPath = path.join(__dirname, "..", "uploads", req.file.filename);
-      if (fs.existsSync(uploadedPath)) {
-        fs.unlinkSync(uploadedPath);
-      }
-      return res.json({ status: false, message: "File already exists" });
-    }
+    if (!req.file) return res.json({ status: false, message: "No file uploaded" });
 
     const newUpload = new Upload({
-      uploadedBy: uploaderEmail,
+      uploadedBy: req.user.email,
       filename: req.file.filename,
       originalname: req.file.originalname,
     });
 
     await newUpload.save();
     res.json({ status: true, message: "File uploaded successfully" });
-
   } catch (err) {
-    console.error(err);
     res.status(500).json({ status: false, message: "Server error" });
   }
 });
 
-// Get files by user
-router.get("/user/:email", async (req, res) => {
-  try {
-    const files = await Upload.find({ uploadedBy: req.params.email });
-    res.json(files);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ status: false, message: "Server error" });
-  }
-});
-
-// Delete a file
+// Delete file
 router.delete("/delete/:id", async (req, res) => {
   try {
     const file = await Upload.findById(req.params.id);
-    if (!file) return res.json({ status: false, message: "File not found" });
+    if (!file) return res.status(404).json({ status: false, message: "File not found" });
 
-    const filePath = path.join(__dirname, "..", "uploads", file.filename);
+    const filePath = path.join(uploadsDir, file.filename);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     await Upload.findByIdAndDelete(req.params.id);
+
     res.json({ status: true, message: "File deleted" });
   } catch (err) {
-    console.error(err);
+    res.status(500).json({ status: false, message: "Server error" });
+  }
+});
+
+// Get uploads by user
+router.get("/user/:email", verifyToken, async (req, res) => {
+  try {
+    const uploads = await Upload.find({ uploadedBy: req.params.email });
+    res.json(uploads);
+  } catch (err) {
     res.status(500).json({ status: false, message: "Server error" });
   }
 });

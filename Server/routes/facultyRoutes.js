@@ -1,70 +1,28 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const AssignedFile = require("../models/AssignedFile");
 const StudentResponse = require("../models/StudentResponse");
 const User = require("../models/User");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 
 const router = express.Router();
 
 // Multer setup
+const uploadsDir = path.join(__dirname, "..", "uploads");
 const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
 });
 const upload = multer({ storage });
 
-// Get all students
-router.get("/students", async (req, res) => {
-  try {
-    const students = await User.find({ role: "student" }, { name: 1, email: 1 });
-    res.json({ status: true, students });
-  } catch (err) {
-    console.error("Error fetching students:", err);
-    res.status(500).json({ status: false, message: "Server error" });
-  }
-});
-
-// Get assigned files
-router.get("/assigned-files/:facultyEmail", async (req, res) => {
-  try {
-    const files = await AssignedFile.find({ facultyEmail: req.params.facultyEmail });
-    res.json(files);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ status: false, message: "Server error" });
-  }
-});
-
-// Get student submissions
-router.get("/responses/:facultyNameOrEmail", async (req, res) => {
-  try {
-    const facultyIdentifier = req.params.facultyNameOrEmail;
-    const submissions = await StudentResponse.find({
-      $or: [
-        { facultyName: facultyIdentifier },
-        { facultyEmail: facultyIdentifier }
-      ]
-    });
-    res.json(submissions);
-  } catch (err) {
-    console.error("Error fetching submissions:", err);
-    res.status(500).json({ status: false, message: "Server error" });
-  }
-});
-
-// Assign task/file
+// Assign task/file to student
 router.post("/assign-file", upload.single("file"), async (req, res) => {
   try {
     const data = JSON.parse(req.body.data);
     const { facultyEmail, facultyName, studentEmail, task } = data;
 
-    if (!facultyEmail || !facultyName || !studentEmail) {
+    if (!facultyEmail || !facultyName || !studentEmail)
       return res.json({ status: false, message: "Missing required fields" });
-    }
 
     const newAssignedFile = new AssignedFile({
       facultyEmail,
@@ -78,32 +36,42 @@ router.post("/assign-file", upload.single("file"), async (req, res) => {
     await newAssignedFile.save();
     res.json({ status: true, message: "Task assigned successfully" });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ status: false, message: "Server error" });
   }
 });
 
-// Grade submission
+// Get all students
+router.get("/students", async (req, res) => {
+  try {
+    const students = await User.find({ role: "student" }, { name: 1, email: 1 });
+    res.json({ status: true, students });
+  } catch (err) {
+    res.json({ status: false, message: "Error fetching students" });
+  }
+});
+
+// Get submissions for a specific faculty
+router.get("/responses/:facultyName", async (req, res) => {
+  try {
+    const submissions = await StudentResponse.find({ facultyName: req.params.facultyName });
+    res.json(submissions);
+  } catch (err) {
+    res.json([]);
+  }
+});
+
+// Approve/reject student submission
 router.post("/grade-submission/:id", async (req, res) => {
   try {
     const { status } = req.body;
-    if (!["approved", "rejected", "pending"].includes(status)) {
+    if (!["approved", "rejected", "pending"].includes(status))
       return res.json({ status: false, message: "Invalid status value" });
-    }
 
-    const updated = await StudentResponse.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
-
-    if (!updated) {
-      return res.json({ status: false, message: "Submission not found" });
-    }
+    const updated = await StudentResponse.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    if (!updated) return res.json({ status: false, message: "Submission not found" });
 
     res.json({ status: true, message: `Submission marked as ${status}` });
   } catch (err) {
-    console.error("Grade submission error:", err);
     res.status(500).json({ status: false, message: "Server error" });
   }
 });
