@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Contact.css';
-import contactimg from '../images/contact.jpeg';
+import contactImage from '../images/Contact.jpeg'; // if file is 'Contact.jpeg'
 import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +50,7 @@ const Contact = () => {
             <ToastContainer />
             <div className="contact-content">
                 <div className="contact-left">
-                    <img src={contactimg} alt="Contact" className="contact-img" />
+                    <img src={contactImage} alt="Contact" className="contact-img" />
                     <a href="https://www.marwadiuniversity.ac.in/" target="_blank" rel="noreferrer">
                         <p className="contact-para">Marwadi University,</p>
                         <p className="contact-para">Morbi Road,</p>
