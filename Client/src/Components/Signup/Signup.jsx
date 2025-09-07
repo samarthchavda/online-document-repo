@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './signup.css';
+import './Signup.css'; // ← If your file is named 'Signup.css'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
