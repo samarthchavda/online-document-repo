@@ -12,6 +12,8 @@ const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
+  const API_BASE = process.env.REACT_APP_API_URL;
+
   const logoutAndRedirect = useCallback(() => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("token");
@@ -25,7 +27,6 @@ const Upload = () => {
     }
   }, [userEmail, token, logoutAndRedirect]);
 
-  // 🔧 FIXED: Improved fetch helper with JSON error handling
   const fetchWithAuth = async (url) => {
     try {
       const res = await fetch(url, {
@@ -55,12 +56,12 @@ const Upload = () => {
   };
 
   const fetchAssignedFiles = useCallback(async () => {
-    const data = await fetchWithAuth(`http://localhost:2000/student/assigned-files/${userEmail}`);
+    const data = await fetchWithAuth(`${API_BASE}/student/assigned-files/${userEmail}`);
     if (data) setAssignedFiles(data);
   }, [userEmail]);
 
   const fetchStudentResponses = useCallback(async () => {
-    const data = await fetchWithAuth(`http://localhost:2000/student/responses/${userEmail}`);
+    const data = await fetchWithAuth(`${API_BASE}/student/responses/${userEmail}`);
     if (data) setStudentResponses(data);
   }, [userEmail]);
 
@@ -81,7 +82,7 @@ const Upload = () => {
     formData.append('file', selectedFile);
 
     try {
-      const res = await fetch('http://localhost:2000/uploads/upload', {
+      const res = await fetch(`${API_BASE}/uploads/upload`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
@@ -103,7 +104,7 @@ const Upload = () => {
         alert("File uploaded successfully!");
         setSelectedFile(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
-        fetchAssignedFiles(); // refresh
+        fetchAssignedFiles();
       } else {
         alert(data.message || "Upload failed.");
       }
@@ -126,7 +127,7 @@ const Upload = () => {
     formData.append("facultyName", file.facultyName);
 
     try {
-      const res = await fetch("http://localhost:2000/student/submit-task", {
+      const res = await fetch(`${API_BASE}/student/submit-task`, {
         method: "POST",
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
@@ -180,7 +181,7 @@ const Upload = () => {
                         <p>
                           <strong>📎 File:</strong>{' '}
                           <a
-                            href={`http://localhost:2000/uploads/${file.filename}`}
+                            href={`${API_BASE}/uploads/${file.filename}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
